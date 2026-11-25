@@ -1,49 +1,45 @@
 #include "matrixfunc.h"
 
-int sred_arif(int *matptr, size_t rows, size_t cols) {
-    printf("srednee arifmeticheskoe:\n");
-    for (int column = 0; column < cols; column++) {
+// Функция №10: среднее арифметическое каждого столбца
+void sred_arif(int *matptr, size_t rows, size_t cols) {
+    printf("Среднее арифметическое по столбцам:\n");
+    for (size_t j = 0; j < cols; j++) {
         int total = 0;
-        for (int i = 0; i < rows; i++) {
-            //printf("%d", *(matptr + i*cols + column));
-            total += *(matptr + i*cols + column);
+        for (size_t i = 0; i < rows; i++) {
+            total += *(matptr + i * MAX_SIZE + j);
         }
-        if (total == 0) {
-            printf("error 404: not found");
-            return 0;
-        }
-        printf("column %d: %d\n", column+1, total/rows);
+        printf("Столбец %zu: %.2f\n", j, (double)total / rows);
     }
-    printf("\n\n");
-    return 0;
 }
 
+// Функция №19: количество положительных элементов матрицы
 int plus_len(int *matptr, size_t rows, size_t cols) {
-    int total = 0;
-    for (int i = 0; i < rows*cols; i++) {
-        if (*(matptr + i) > 0) {
-            total += 1;
+    int count = 0;
+    for (size_t i = 0; i < rows; i++) {
+        for (size_t j = 0; j < cols; j++) {
+            if (*(matptr + i * MAX_SIZE + j) > 0) {
+                count++;
+            }
         }
     }
-    if (total == 0) {
-        printf("error 404: not found");
-        return 0;
-    }
-    printf("all polozitelnie: %d\n", total);
-    return 0;
+    return count;
 }
 
-int last_minus(int *matptr, size_t rows, size_t cols) {
-    int last = 0;
-    for (int i = 0; i < rows*cols; i++) {
-        if (*(matptr + i) < 0) {
-            last = *(matptr + i);
+// Функция №24: поиск индексов последнего отрицательного элемента при обходе по строкам
+// Возвращает 0, если элемент найден, и -1 (код ошибки), если отрицательных элементов нет
+int last_minus(int *matptr, size_t rows, size_t cols, size_t *res_row, size_t *res_col) {
+    int found = 0;
+    for (size_t i = 0; i < rows; i++) {
+        for (size_t j = 0; j < cols; j++) {
+            if (*(matptr + i * MAX_SIZE + j) < 0) {
+                *res_row = i;
+                *res_col = j;
+                found = 1;
+            }
         }
     }
-    if (last == 0) {
-        printf("error 404: not found");
-        return 0;
+    if (!found) {
+        return -1; // Код ошибки: элемент не найден
     }
-    printf("last minus: %d", last);
     return 0;
 }
